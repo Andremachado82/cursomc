@@ -15,7 +15,7 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
-	public Categoria buscarCategira(Integer id) {
+	public Categoria buscarCategoria(Integer id) {
 		
 		Optional<Categoria> obj = categoriaRepository.findById(id);
 		
