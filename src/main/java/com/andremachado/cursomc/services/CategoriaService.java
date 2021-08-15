@@ -1,6 +1,5 @@
 package com.andremachado.cursomc.services;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.andremachado.cursomc.domain.Categoria;
+import com.andremachado.cursomc.dto.CategoriaDto;
 import com.andremachado.cursomc.repositories.CategoriaRepository;
 import com.andremachado.cursomc.services.exceptions.DataIntegrityException;
 import com.andremachado.cursomc.services.exceptions.ObjectNotFoundException;
@@ -62,6 +62,10 @@ public class CategoriaService {
 		PageRequest pageRequest =  PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
 		return categoriaRepository.findAll(pageRequest); 
+	}
+	
+	public Categoria fromDto(CategoriaDto categoriaDto) {
+		return new Categoria(categoriaDto.getId(), categoriaDto.getNome());
 	}
 
 }
