@@ -81,7 +81,8 @@ public class CategoriaResource {
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Valid CategoriaDto categoriaDto) {
 		Categoria categoria = categoriaService.fromDto(categoriaDto);
-		categoria = categoriaService.update(id, categoria);
+		categoria.setId(id);
+		categoria = categoriaService.update(categoria);
 
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()

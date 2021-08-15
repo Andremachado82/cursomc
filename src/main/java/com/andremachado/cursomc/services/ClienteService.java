@@ -1,12 +1,9 @@
 package com.andremachado.cursomc.services;
 
-import java.beans.Beans;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,8 +15,6 @@ import com.andremachado.cursomc.dto.ClienteDto;
 import com.andremachado.cursomc.repositories.ClienteRepository;
 import com.andremachado.cursomc.services.exceptions.DataIntegrityException;
 import com.andremachado.cursomc.services.exceptions.ObjectNotFoundException;
-
-import antlr.Utils;
 
 @Service
 public class ClienteService {

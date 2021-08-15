@@ -62,9 +62,10 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(listClienteDto);
 	}
 	
-	@PutMapping
-	public ResponseEntity<Void> update(@RequestBody @Valid ClienteDto clienteDto) {
-		Cliente cliente = clienteService.fromDto(clienteDto);
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Valid ClienteDto clienteDto) {
+		Cliente cliente = clienteService.fromDto(clienteDto);	
+		cliente.setId(id);
 		cliente = clienteService.update(cliente);
 
 		URI uri = ServletUriComponentsBuilder

@@ -2,14 +2,12 @@ package com.andremachado.cursomc.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.andremachado.cursomc.domain.Cliente;
 
 public class ClienteDto {
 	
-	@NotNull
 	private Integer id;
 	
 	@NotBlank(message="Nome deve ser preenchido")

@@ -36,14 +36,12 @@ public class CategoriaService {
 		return categoriaRepository.save(categoria);
 	}
 
-	public Categoria update(Integer id, Categoria categoria) {
-		if (!categoriaRepository.existsById(id)) {
-			throw new ObjectNotFoundException(
-					"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName());
-		}
-		categoria.setId(id);
-		categoriaRepository.save(categoria);
-		return categoria;
+	public Categoria update(Categoria categoria) {
+		Categoria newObj = findCategoriaByPorId(categoria.getId());
+		updateData(newObj, categoria);
+//		BeanUtils.copyProperties(categoria, newObj, "cpfOuCnpj", "tipo");
+		
+		return categoriaRepository.save(newObj);
 	}
 
 	public void deleleById(Integer id) {
@@ -67,5 +65,8 @@ public class CategoriaService {
 	public Categoria fromDto(CategoriaDto categoriaDto) {
 		return new Categoria(categoriaDto.getId(), categoriaDto.getNome());
 	}
-
+	
+	private void updateData(Categoria newObj, Categoria cliente) {
+		newObj.setNome(cliente.getNome());
+	}
 }
