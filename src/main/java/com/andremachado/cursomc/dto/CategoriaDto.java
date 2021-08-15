@@ -9,7 +9,7 @@ public class CategoriaDto {
 	
 	private Integer id;
 	
-	@NotBlank(message = "Nome não informado")
+	@NotBlank(message = "Nome deve ser preenchido")
 	@Size(min=5, max=80, message="Tamanho deve ter entre 5 e 80 caracteres")
 	private String nome;
 	
