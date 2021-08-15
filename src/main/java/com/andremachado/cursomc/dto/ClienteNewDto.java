@@ -1,19 +1,44 @@
 package com.andremachado.cursomc.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import com.andremachado.cursomc.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDto {
 	
+
+	@NotBlank(message="Nome deve ser preenchido")
+	@Size(min=5, max=120, message="Tamanho deve ter entre 5 e 120 caracteres")
 	private String nome;
+	
+	@NotBlank(message="Email deve ser preenchido")
+	@Email(message="Email inválido")
 	private String email;
+	
+	@NotBlank(message="Cpf ou Cnpj deve ser preenchido")
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	@NotBlank(message="Logradouro deve ser preenchido")
 	private String logradouro;
+	
+	@NotBlank(message="Número deve ser preenchido")
 	private String numero;
+	
 	private String complemento;
+	
+	@NotBlank(message="Bairro deve ser preenchido")
 	private String bairro;
+	
+	@NotBlank(message="Cep deve ser preenchido")
 	private String cep;
 	
+	@NotBlank(message="Telefone deve ser preenchido")
 	private String telefone1;
+	
 	private String telefone2;
 	private String telefone3;
 	
