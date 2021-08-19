@@ -5,7 +5,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.andremachado.cursomc.domain.Cliente;
+import com.andremachado.cursomc.services.validation.ClienteUpdate;
 
+@ClienteUpdate
 public class ClienteDto {
 	
 	private Integer id;
