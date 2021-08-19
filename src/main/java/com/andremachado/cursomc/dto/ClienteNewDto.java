@@ -1,5 +1,6 @@
 package com.andremachado.cursomc.dto;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -14,6 +15,7 @@ public class ClienteNewDto {
 	@Size(min=5, max=120, message="Tamanho deve ter entre 5 e 120 caracteres")
 	private String nome;
 	
+	@Column(unique = true)
 	@NotBlank(message="Email deve ser preenchido")
 	@Email(message="Email inválido")
 	private String email;
