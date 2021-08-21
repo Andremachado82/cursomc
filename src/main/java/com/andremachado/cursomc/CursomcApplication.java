@@ -29,7 +29,7 @@ import com.andremachado.cursomc.repositories.EstadoRepository;
 import com.andremachado.cursomc.repositories.ItemPedidoRepository;
 import com.andremachado.cursomc.repositories.PagamentoRepository;
 import com.andremachado.cursomc.repositories.PedidoRepository;
-import com.andremachado.cursomc.repositories.ProdutoRepostory;
+import com.andremachado.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner {
@@ -38,7 +38,7 @@ public class CursomcApplication implements CommandLineRunner {
 	private CategoriaRepository categoriaRepository;
 	
 	@Autowired
-	private ProdutoRepostory produtoRepostory;
+	private ProdutoRepository produtoRepostory;
 	
 	@Autowired
 	private EstadoRepository estadoRepository;
