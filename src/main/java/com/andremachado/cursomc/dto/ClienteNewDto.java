@@ -22,7 +22,11 @@ public class ClienteNewDto {
 	
 	@NotBlank(message="Cpf ou Cnpj deve ser preenchido")
 	private String cpfOuCnpj;
+	
 	private Integer tipo;
+	
+	@NotBlank
+	private String senha;
 	
 	@NotBlank(message="Logradouro deve ser preenchido")
 	private String logradouro;
@@ -151,5 +155,13 @@ public class ClienteNewDto {
 
 	public void setCidadeId(Integer cidadeId) {
 		this.cidadeId = cidadeId;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 }
