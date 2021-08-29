@@ -70,5 +70,4 @@ public class PedidoService {
 		emailService.sendOrderConfirmatioEmail(pedido);
 		return pedido;
 	}
-
 }
