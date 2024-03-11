@@ -1,6 +1,6 @@
 package com.andremachado.cursomc.domain;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import com.andremachado.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonTypeName;

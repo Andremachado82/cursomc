@@ -2,11 +2,10 @@ package com.andremachado.cursomc.domain;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-
 import com.andremachado.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.persistence.Entity;
 
 @Entity
 @JsonTypeName("pagamentoComBoleto")
