@@ -1,26 +1,41 @@
 package com.andremachado.cursomc.config;
 
-import java.util.Arrays;
-
+import com.andremachado.cursomc.security.JWTAuthenticationFilter;
+import com.andremachado.cursomc.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig  {
+
+	@Autowired
+	private AuthenticationConfiguration authenticationConfiguration;
+
+	@Autowired
+	private UserDetailsService userDetailsService;
+
+	@Autowired
+	private JWTUtil jwtUtil;
 	
 	@Autowired
     Environment env;
@@ -50,7 +65,13 @@ public class SecurityConfig  {
 						.requestMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
 						.requestMatchers(PUBLIC_MATCHERS).permitAll()
 						.anyRequest().authenticated()
-				).build();
+				)
+				.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtUtil))
+				.build();
+	}
+
+	public UserDetails configure(AuthenticationManagerBuilder auth) throws Exception {
+		return (UserDetails) auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 	
 	@Bean
