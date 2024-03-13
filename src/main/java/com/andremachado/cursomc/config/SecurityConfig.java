@@ -1,6 +1,7 @@
 package com.andremachado.cursomc.config;
 
 import com.andremachado.cursomc.security.JWTAuthenticationFilter;
+import com.andremachado.cursomc.security.JWTAuthorizationFilter;
 import com.andremachado.cursomc.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -67,6 +68,7 @@ public class SecurityConfig  {
 						.anyRequest().authenticated()
 				)
 				.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtUtil))
+				.addFilter(new JWTAuthorizationFilter(authenticationConfiguration.getAuthenticationManager(), jwtUtil, userDetailsService))
 				.build();
 	}
 
