@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 
+import com.andremachado.cursomc.domain.enums.Perfil;
+import com.andremachado.cursomc.security.UserSS;
+import com.andremachado.cursomc.services.exceptions.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -37,6 +40,12 @@ public class ClienteService {
 	BCryptPasswordEncoder bPasswordEncoder;
 	
 	public Cliente findClienteById(Integer id) {
+
+		UserSS userSS = UserService.authenticated();
+		if (userSS != null && !userSS.hasRole(Perfil.ADMIN) && !id.equals(userSS.getId())) {
+			throw new AuthorizationException("Acesso negado.");
+		}
+
 		Optional<Cliente> obj = clienteRepository.findById(id);
 		
 		return obj.orElseThrow(() -> new ObjectNotFoundException(

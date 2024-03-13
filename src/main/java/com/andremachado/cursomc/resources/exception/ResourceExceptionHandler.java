@@ -1,5 +1,6 @@
 package com.andremachado.cursomc.resources.exception;
 
+import com.andremachado.cursomc.services.exceptions.AuthorizationException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.andremachado.cursomc.services.exceptions.DataIntegrityException;
 import com.andremachado.cursomc.services.exceptions.ObjectNotFoundException;
+
+import javax.naming.AuthenticationException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -40,5 +43,13 @@ public class ResourceExceptionHandler {
 			validationError.addError(x.getField(), x.getDefaultMessage());
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
+	}
+
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+
+		StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
 	}
 }
