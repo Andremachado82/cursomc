@@ -3,9 +3,15 @@ package com.andremachado.cursomc.services;
 import java.util.Date;
 import java.util.Optional;
 
+import com.andremachado.cursomc.domain.Cliente;
+import com.andremachado.cursomc.security.UserSS;
+import com.andremachado.cursomc.services.exceptions.AuthorizationException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.andremachado.cursomc.domain.ItemPedido;
@@ -69,5 +75,14 @@ public class PedidoService {
 		itemPedidoRepository.saveAll(pedido.getItens());
 		emailService.sendOrderConfirmationHtmlEmail(pedido);
 		return pedido;
+	}
+
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS userSS = UserService.authenticated();
+		if (userSS == null) throw new AuthorizationException("Acesso negado");
+
+		PageRequest pageRequest =  PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.findClienteById(userSS.getId());
+		return pedidoRepository.findByCliente(cliente, pageRequest);
 	}
 }
