@@ -1,5 +1,6 @@
 package com.andremachado.cursomc.services;
 
+import com.andremachado.cursomc.domain.Cliente;
 import jakarta.mail.internet.MimeMessage;
 
 import org.springframework.mail.SimpleMailMessage;
@@ -15,4 +16,6 @@ public interface EmailService {
 	void sendOrderConfirmationHtmlEmail(Pedido pedido);
 	
 	void sendHtmlEmail(MimeMessage msg);
+
+    void sendNewPasswordEmail(Cliente cliente, String novaSenha);
 }

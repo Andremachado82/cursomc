@@ -2,6 +2,7 @@ package com.andremachado.cursomc.services;
 
 import java.util.Date;
 
+import com.andremachado.cursomc.domain.Cliente;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -69,5 +70,21 @@ public abstract class AbstractEmailService implements EmailService {
 		helper.setSentDate(new Date(System.currentTimeMillis()));
 		helper.setText(htmlFromTemplatePedido(pedido), true);		
 		return mimeMessage;
+	}
+
+	@Override
+	public void sendNewPasswordEmail(Cliente cliente, String novaSenha) {
+		SimpleMailMessage sm = prepareNewPasswordEmail(cliente, novaSenha);
+		sendEmail(sm);
+	}
+
+	protected SimpleMailMessage prepareNewPasswordEmail(Cliente cliente, String novaSenha) {
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(cliente.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("Solicitação de nova senha");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("Nova senha: " + novaSenha);
+		return sm;
 	}
 }
