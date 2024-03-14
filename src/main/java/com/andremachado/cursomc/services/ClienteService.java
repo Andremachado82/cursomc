@@ -1,5 +1,6 @@
 package com.andremachado.cursomc.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ import com.andremachado.cursomc.repositories.ClienteRepository;
 import com.andremachado.cursomc.repositories.EnderecoRepository;
 import com.andremachado.cursomc.services.exceptions.DataIntegrityException;
 import com.andremachado.cursomc.services.exceptions.ObjectNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ClienteService {
@@ -38,6 +40,9 @@ public class ClienteService {
 	
 	@Autowired
 	BCryptPasswordEncoder bPasswordEncoder;
+
+	@Autowired
+	private S3Service s3Service;
 	
 	public Cliente findClienteById(Integer id) {
 
@@ -120,5 +125,9 @@ public class ClienteService {
 	private void updateData(Cliente newObj, Cliente cliente) {
 		newObj.setNome(cliente.getNome());
 		newObj.setEmail(cliente.getEmail());
+	}
+
+	public URI uploadProfileImage(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 }
