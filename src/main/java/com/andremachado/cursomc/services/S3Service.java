@@ -2,6 +2,7 @@ package com.andremachado.cursomc.services;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.andremachado.cursomc.services.exceptions.FileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class S3Service {
             String contentType = multipartFile.getContentType();
             return uploadFile(inputStream, fileName, contentType);
         } catch (IOException exception) {
-            throw new RuntimeException("Erro de IO: " + exception.getMessage());
+            throw new FileException("Erro de IO: " + exception.getMessage());
         }
     }
 
@@ -44,7 +45,7 @@ public class S3Service {
             LOG.info("--------------------Finalizado upload do arquivo--------------");
             return amazonS3.getUrl(bucketName, fileName).toURI();
         } catch (URISyntaxException exception) {
-            throw new RuntimeException("Erro ao converter URL para URI");
+            throw new FileException("Erro ao converter URL para URI");
         }
     }
 }
