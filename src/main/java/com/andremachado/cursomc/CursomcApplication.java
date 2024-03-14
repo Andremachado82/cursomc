@@ -1,5 +1,6 @@
 package com.andremachado.cursomc;
 
+import com.andremachado.cursomc.services.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,16 +15,7 @@ import com.andremachado.cursomc.repositories.PedidoRepository;
 public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
-	EnderecoRepository enderecoRepository;
-	
-	@Autowired
-	PedidoRepository pedidoRepository;
-	
-	@Autowired
-	PagamentoRepository pagamentoRepository;
-	
-	@Autowired
-	ItemPedidoRepository itemPedidoRepository;
+	S3Service s3Service;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -31,6 +23,7 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		s3Service.uploadFile("/home/andre/Downloads/internacional.jpg");
 	}
 
 }
