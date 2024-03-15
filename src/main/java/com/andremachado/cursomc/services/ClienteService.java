@@ -31,103 +31,109 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ClienteService {
-	
-	@Autowired
-	private ClienteRepository clienteRepository;
-	
-	@Autowired
-	EnderecoRepository enderecoRepository;
-	
-	@Autowired
-	BCryptPasswordEncoder bPasswordEncoder;
 
-	@Autowired
-	private S3Service s3Service;
-	
-	public Cliente findClienteById(Integer id) {
+    @Autowired
+    private ClienteRepository clienteRepository;
 
-		UserSS userSS = UserService.authenticated();
-		if (userSS != null && !userSS.hasRole(Perfil.ADMIN) && !id.equals(userSS.getId())) {
-			throw new AuthorizationException("Acesso negado.");
-		}
+    @Autowired
+    EnderecoRepository enderecoRepository;
 
-		Optional<Cliente> obj = clienteRepository.findById(id);
-		
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
-	}
-	
-	public List<Cliente> findAll() {
-		return clienteRepository.findAll();
-	}
-	
-	@Transactional
-	public Cliente insert(Cliente cliente) {
-		enderecoRepository.saveAll(cliente.getEnderecos());
-		return clienteRepository.save(cliente);
-	}
-	
-	public Cliente update(Cliente cliente) {
-		Cliente newObj = findClienteById(cliente.getId());
-		updateData(newObj, cliente);
+    @Autowired
+    BCryptPasswordEncoder bPasswordEncoder;
+
+    @Autowired
+    private S3Service s3Service;
+
+    public Cliente findClienteById(Integer id) {
+
+        UserSS userSS = UserService.authenticated();
+        if (userSS != null && !userSS.hasRole(Perfil.ADMIN) && !id.equals(userSS.getId())) {
+            throw new AuthorizationException("Acesso negado.");
+        }
+
+        Optional<Cliente> obj = clienteRepository.findById(id);
+
+        return obj.orElseThrow(() -> new ObjectNotFoundException(
+                "Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+    }
+
+    public List<Cliente> findAll() {
+        return clienteRepository.findAll();
+    }
+
+    @Transactional
+    public Cliente insert(Cliente cliente) {
+        enderecoRepository.saveAll(cliente.getEnderecos());
+        return clienteRepository.save(cliente);
+    }
+
+    public Cliente update(Cliente cliente) {
+        Cliente newObj = findClienteById(cliente.getId());
+        updateData(newObj, cliente);
 //		BeanUtils.copyProperties(cliente, newObj, "cpfOuCnpj", "tipo");
-		
-		return clienteRepository.save(newObj);
-	}
 
-	public void deleleById(Integer id) {
-		if (!clienteRepository.existsById(id)) {
-			throw new ObjectNotFoundException(
-					"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName());
-		}
-		try {
-			clienteRepository.deleteById(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir um cliente que possui produtos");
-		}
-	}
-	
-	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
-		PageRequest pageRequest =  PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		
-		return clienteRepository.findAll(pageRequest); 
-	}
-	
-	public Cliente fromDto(ClienteDto clienteDto) {
-		return new Cliente(clienteDto.getId(), clienteDto.getNome(), clienteDto.getEmail(), null, null, null);
-	}
-	
-	public Cliente fromDto(ClienteNewDto clienteNewDto) {
-		Cliente cliente = new Cliente(null, clienteNewDto.getNome(), clienteNewDto.getEmail(), 
-									  clienteNewDto.getCpfOuCnpj(), TipoCliente.toEnum(clienteNewDto.getTipo()), 
-									  bPasswordEncoder.encode(clienteNewDto.getSenha()));
-		
-		Cidade cidade = new Cidade(clienteNewDto.getCidadeId(), null, null);
-		
-		Endereco endereco = new Endereco(null, clienteNewDto.getLogradouro(), clienteNewDto.getNumero()
-										, clienteNewDto.getComplemento(), clienteNewDto.getBairro(), clienteNewDto.getCep()
-										 ,cliente, cidade);
-		
-		cliente.getEnderecos().add(endereco);
-		cliente.getTelefones().add(clienteNewDto.getTelefone1());
-		
-		if (clienteNewDto.getTelefone2() != null) {
-			cliente.getTelefones().add(clienteNewDto.getTelefone2());
-		}
-		
-		if (clienteNewDto.getTelefone3() != null) {
-			cliente.getTelefones().add(clienteNewDto.getTelefone3());
-		}
-		
-		return cliente;
-	}
-	
-	private void updateData(Cliente newObj, Cliente cliente) {
-		newObj.setNome(cliente.getNome());
-		newObj.setEmail(cliente.getEmail());
-	}
+        return clienteRepository.save(newObj);
+    }
 
-	public URI uploadProfileImage(MultipartFile multipartFile) {
-		return s3Service.uploadFile(multipartFile);
-	}
+    public void deleleById(Integer id) {
+        if (!clienteRepository.existsById(id)) {
+            throw new ObjectNotFoundException(
+                    "Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName());
+        }
+        try {
+            clienteRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Não é possível excluir um cliente que possui produtos");
+        }
+    }
+
+    public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+
+        return clienteRepository.findAll(pageRequest);
+    }
+
+    public Cliente fromDto(ClienteDto clienteDto) {
+        return new Cliente(clienteDto.getId(), clienteDto.getNome(), clienteDto.getEmail(), null, null, null);
+    }
+
+    public Cliente fromDto(ClienteNewDto clienteNewDto) {
+        Cliente cliente = new Cliente(null, clienteNewDto.getNome(), clienteNewDto.getEmail(),
+                clienteNewDto.getCpfOuCnpj(), TipoCliente.toEnum(clienteNewDto.getTipo()),
+                bPasswordEncoder.encode(clienteNewDto.getSenha()));
+
+        Cidade cidade = new Cidade(clienteNewDto.getCidadeId(), null, null);
+
+        Endereco endereco = new Endereco(null, clienteNewDto.getLogradouro(), clienteNewDto.getNumero()
+                , clienteNewDto.getComplemento(), clienteNewDto.getBairro(), clienteNewDto.getCep()
+                , cliente, cidade);
+
+        cliente.getEnderecos().add(endereco);
+        cliente.getTelefones().add(clienteNewDto.getTelefone1());
+
+        if (clienteNewDto.getTelefone2() != null) {
+            cliente.getTelefones().add(clienteNewDto.getTelefone2());
+        }
+
+        if (clienteNewDto.getTelefone3() != null) {
+            cliente.getTelefones().add(clienteNewDto.getTelefone3());
+        }
+
+        return cliente;
+    }
+
+    private void updateData(Cliente newObj, Cliente cliente) {
+        newObj.setNome(cliente.getNome());
+        newObj.setEmail(cliente.getEmail());
+    }
+
+    public URI uploadProfileImage(MultipartFile multipartFile) {
+        UserSS userSS = UserService.authenticated();
+        if (userSS == null) throw new AuthorizationException("Acesso negado");
+        URI uri = s3Service.uploadFile(multipartFile);
+        Cliente cliente = clienteRepository.findById(userSS.getId()).orElseThrow();
+        cliente.setImageUrl(String.valueOf(uri));
+        clienteRepository.save(cliente);
+        return uri;
+    }
 }
