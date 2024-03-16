@@ -73,6 +73,16 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
+    public Cliente findByEmail(String email) {
+        UserSS userSS = UserService.authenticated();
+        if (userSS == null || !userSS.hasRole(Perfil.ADMIN) && !email.equals(userSS.getUsername()))
+            throw new AuthorizationException("Acesso negado");
+
+        Cliente cliente = clienteRepository.findByEmail(email);
+        if (cliente == null) throw new ObjectNotFoundException("Cliente não encontrado com o email : " + userSS.getUsername());
+        return cliente;
+    }
+
     @Transactional
     public Cliente insert(Cliente cliente) {
         enderecoRepository.saveAll(cliente.getEnderecos());
