@@ -47,7 +47,6 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(categoria);
 	}
 
-	@CrossOrigin
 	@GetMapping
 	public ResponseEntity<List<CategoriaDto>> findAll() {
 

@@ -51,7 +51,8 @@ public class SecurityConfig  {
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
 			"/categorias/**",
-			"/estados/**"
+			"/estados/**",
+
 	};
 
 	private static final String[] PUBLIC_MATCHERS_POST = {
@@ -95,7 +96,7 @@ public class SecurityConfig  {
 		// Don't do this in production, use a proper list of allowed origins
 		// TODO trocar o endereço pelo do servidor de produção
 		config.setAllowedOrigins(Collections.singletonList("http://localhost:8100"));
-		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+		config.setAllowedHeaders(Collections.singletonList("*"));
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
