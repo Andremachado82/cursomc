@@ -21,10 +21,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -64,7 +65,9 @@ public class SecurityConfig  {
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
             http.headers(header ->
 					header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable).disable()
+
 			);
+
         }
 
 		return http.csrf(AbstractHttpConfigurer::disable)
@@ -84,13 +87,18 @@ public class SecurityConfig  {
 		return (UserDetails) auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 	
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-		corsConfiguration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+	@Bean // TODO Apenas para testes, remover em produção
+	public CorsFilter corsFilter() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", corsConfiguration);
-		return source;
+		final CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		// Don't do this in production, use a proper list of allowed origins
+		// TODO trocar o endereço pelo do servidor de produção
+		config.setAllowedOrigins(Collections.singletonList("http://localhost:8100"));
+		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
 	}
 	
 	@Bean
