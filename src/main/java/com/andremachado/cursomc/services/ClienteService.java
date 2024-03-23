@@ -57,12 +57,10 @@ public class ClienteService {
     private Integer sizeImgPrefix;
 
     public Cliente findClienteById(Integer id) {
-
         UserSS userSS = UserService.authenticated();
         if (userSS != null && !userSS.hasRole(Perfil.ADMIN) && !id.equals(userSS.getId())) {
             throw new AuthorizationException("Acesso negado.");
         }
-
         Optional<Cliente> obj = clienteRepository.findById(id);
 
         return obj.orElseThrow(() -> new ObjectNotFoundException(
@@ -92,7 +90,6 @@ public class ClienteService {
     public Cliente update(Cliente cliente) {
         Cliente newObj = findClienteById(cliente.getId());
         updateData(newObj, cliente);
-//		BeanUtils.copyProperties(cliente, newObj, "cpfOuCnpj", "tipo");
 
         return clienteRepository.save(newObj);
     }

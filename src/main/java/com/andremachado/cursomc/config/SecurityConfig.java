@@ -95,7 +95,7 @@ public class SecurityConfig  {
 		config.setAllowCredentials(true);
 		// Don't do this in production, use a proper list of allowed origins
 		// TODO trocar o endereço pelo do servidor de produção
-		config.setAllowedOrigins(Collections.singletonList("http://localhost:8100"));
+		config.setAllowedOrigins(Arrays.asList("http://localhost:8100", "http://localhost:8001", "http://localhost:8000"));
 		config.setAllowedHeaders(Collections.singletonList("*"));
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
 		source.registerCorsConfiguration("/**", config);

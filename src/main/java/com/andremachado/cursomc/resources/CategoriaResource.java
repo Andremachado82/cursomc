@@ -41,7 +41,6 @@ public class CategoriaResource {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findById(@PathVariable Integer id) {
-		
 		Categoria categoria = categoriaService.findCategoriaByPorId(id);
 		
 		return ResponseEntity.ok().body(categoria);
@@ -49,7 +48,6 @@ public class CategoriaResource {
 
 	@GetMapping
 	public ResponseEntity<List<CategoriaDto>> findAll() {
-
 		List<Categoria> ListCategorias = categoriaService.findAll();
 		
 		List<CategoriaDto> listCategoriaDto = ListCategorias
